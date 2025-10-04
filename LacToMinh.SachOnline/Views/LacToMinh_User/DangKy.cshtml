@@ -1,0 +1,145 @@
+﻿@model LacToMinh.SachOnline.Models.KHACHHANG
+
+@{
+  ViewBag.Title = "DangKy";
+  Layout = "~/Views/Shared/_LayoutLacToMinh.cshtml";
+}
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+  }
+
+  h2 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  h4 {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  table {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 60%;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  td {
+    padding: 12px 8px;
+    font-size: 15px;
+    color: #444;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="date"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="date"]:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+    }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border: none;
+    color: white;
+  }
+
+    .btn-primary:hover {
+      background: linear-gradient(45deg, #0056b3, #004099);
+    }
+
+  .btn-danger {
+    background: linear-gradient(45deg, #dc3545, #a71d2a);
+    border: none;
+    color: white;
+  }
+
+    .btn-danger:hover {
+      background: linear-gradient(45deg, #a71d2a, #7a1020);
+    }
+
+  .validation-message {
+    color: red;
+    font-size: 13px;
+    margin-left: 5px;
+  }
+</style>
+
+<h4 style="color:red; text-align:center;">@ViewBag.ThongBao</h4>
+<h2>ĐĂNG KÝ THÀNH VIÊN</h2>
+
+@using (Html.BeginForm("DangKy", "LacToMinh_User", FormMethod.Post))
+{
+  @Html.ValidationSummary(true)
+  <table>
+    <tr>
+      <td>Họ tên:</td>
+      <td>@Html.TextBox("HoTen") <span class="validation-message">@ViewData["err1"]</span></td>
+    </tr>
+    <tr>
+      <td>Tên đăng nhập:</td>
+      <td>@Html.TextBox("TenDN") <span class="validation-message">@ViewData["err2"]</span></td>
+    </tr>
+    <tr>
+      <td>Mật khẩu:</td>
+      <td>@Html.Password("MatKhau") <span class="validation-message">@ViewData["err3"]</span></td>
+    </tr>
+    <tr>
+      <td>Mật khẩu nhập lại:</td>
+      <td>@Html.Password("MatKhauNL") <span class="validation-message">@ViewData["err4"]</span></td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td>@Html.TextBox("Email") <span class="validation-message">@ViewData["err5"]</span></td>
+    </tr>
+    <tr>
+      <td>Điện thoại:</td>
+      <td>@Html.TextBox("DienThoai") <span class="validation-message">@ViewData["err6"]</span></td>
+    </tr>
+    <tr>
+      <td>Ngày sinh:</td>
+      <td><input type="date" name="NgaySinh" /></td>
+    </tr>
+    <tr>
+      <td>Địa chỉ:</td>
+      <td><input type="text" name="DiaChi" /></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Đăng ký" class="btn btn-primary" />
+        <input type="reset" value="Xóa Thông Tin" class="btn btn-danger" />
+      </td>
+    </tr>
+  </table>
+}

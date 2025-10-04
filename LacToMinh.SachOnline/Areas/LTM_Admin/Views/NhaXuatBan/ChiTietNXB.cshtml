@@ -1,0 +1,101 @@
+﻿@model LacToMinh.SachOnline.Models.NHAXUATBAN
+
+@{
+  Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <title>Chi tiết Nhà xuất bản</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+  <style>
+    body {
+      background-color: #f5f6fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .info-box {
+      background-color: #fff;
+      border: 1px solid #e1e1e1;
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #333;
+      font-size: 15px;
+    }
+
+    .info-value {
+      color: #555;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+
+    .info-icon {
+      width: 22px;
+      display: inline-block;
+      text-align: center;
+      color: #337ab7;
+    }
+
+    .action-buttons {
+      margin-top: 30px;
+    }
+
+    .panel-title {
+      font-size: 22px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" style="margin-top: 40px;">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title text-primary">📘 Chi tiết Nhà xuất bản</h3>
+      </div>
+      <div class="panel-body">
+
+        <div class="info-box">
+          <div class="info-label">
+            <span class="info-icon">🔢</span> Mã NXB:
+          </div>
+          <div class="info-value">@Model.MaNXB</div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-label">
+            <span class="info-icon">🏷️</span> Tên Nhà xuất bản:
+          </div>
+          <div class="info-value">@Model.TenNXB</div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-label">
+            <span class="info-icon">📍</span> Địa chỉ:
+          </div>
+          <div class="info-value">@Model.DiaChi</div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-label">
+            <span class="info-icon">📞</span> Điện thoại:
+          </div>
+          <div class="info-value">@Model.DienThoai</div>
+        </div>
+
+        <div class="action-buttons text-right">
+          @Html.ActionLink("✏️ Sửa", "Edit", new { id = Model.MaNXB }, new { @class = "btn btn-warning" })
+          @Html.ActionLink("⬅ Quay lại", "Index", null, new { @class = "btn btn-default" })
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

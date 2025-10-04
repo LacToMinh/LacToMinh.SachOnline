@@ -1,0 +1,80 @@
+﻿@model LacToMinh.SachOnline.Models.NHAXUATBAN
+
+@{
+  ViewBag.Title = "Sửa nhà xuất bản";
+}
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+  body {
+    background-color: #f5f6fa;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .panel {
+    margin-top: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+
+  .panel-heading {
+    background-color: #337ab7 !important;
+    color: white !important;
+    border-radius: 8px 8px 0 0;
+  }
+
+    .panel-heading h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+  .form-group label {
+    font-weight: bold;
+  }
+
+  .btn + .btn {
+    margin-left: 10px;
+  }
+</style>
+
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">✏️ Sửa thông tin Nhà xuất bản</h3>
+    </div>
+    <div class="panel-body">
+      @using (Html.BeginForm("Edit", "NhaXuatBan", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+      {
+        @Html.HiddenFor(model => model.MaNXB)
+
+        <div class="form-group">
+          @Html.LabelFor(model => model.TenNXB, new { @class = "col-md-3 control-label" })
+          <div class="col-md-7">
+            @Html.TextBoxFor(model => model.TenNXB, new { @class = "form-control", placeholder = "Nhập tên nhà xuất bản" })
+          </div>
+        </div>
+
+        <div class="form-group">
+          @Html.LabelFor(model => model.DiaChi, new { @class = "col-md-3 control-label" })
+          <div class="col-md-7">
+            @Html.TextBoxFor(model => model.DiaChi, new { @class = "form-control", placeholder = "Nhập địa chỉ nhà xuất bản" })
+          </div>
+        </div>
+
+        <div class="form-group">
+          @Html.LabelFor(model => model.DienThoai, new { @class = "col-md-3 control-label" })
+          <div class="col-md-7">
+            @Html.TextBoxFor(model => model.DienThoai, new { @class = "form-control", placeholder = "Nhập số điện thoại" })
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-offset-3 col-md-7">
+            <input type="submit" value="💾 Lưu thay đổi" class="btn btn-primary" />
+            @Html.ActionLink("⬅ Quay lại", "Index", null, new { @class = "btn btn-default" })
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

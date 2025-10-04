@@ -1,0 +1,120 @@
+﻿@model LacToMinh.SachOnline.Models.SACH
+
+@{
+  ViewBag.Title = "ChiTietSach";
+  Layout = "~/Views/Shared/_LayoutLacToMinh.cshtml";
+}
+
+<style>
+  /* Container tổng thể */
+  .book-detail {
+    max-width: 900px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    display: flex;
+    gap: 25px;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+
+    /* Ảnh bìa sách */
+    .book-detail img {
+      width: 250px; /* cố định chiều rộng */
+      /*height: auto;*/ /* tự động giữ tỷ lệ */
+      height: 350px; /* cố định chiều cao */
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      object-fit: cover; /* cắt vừa khung nếu ảnh to */
+    }
+
+  /* Nội dung bên phải */
+  .book-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+    /* Tên sách */
+    .book-info h2 {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 12px;
+    }
+
+    /* Mô tả (hiện full) */
+    .book-info .description {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      white-space: pre-line; /* hỗ trợ xuống dòng khi có \n */
+    }
+
+  /* Ngày cập nhật + Giá */
+  .book-meta {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+    .book-meta span {
+      font-weight: 600;
+      color: #2980b9;
+    }
+
+  /* Giá bán nổi bật */
+  .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin: 10px 0;
+  }
+
+  /* Nút Add to Cart */
+  .book-info .btn-primary {
+    background: linear-gradient(135deg, #3498db, #2ecc71);
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 8px;
+    transition: 0.3s;
+    color: #fff;
+  }
+
+    .book-info .btn-primary:hover {
+      background: linear-gradient(135deg, #2ecc71, #3498db);
+      transform: scale(1.05);
+    }
+</style>
+
+<div class="book-detail">
+  <!-- Hình ảnh -->
+  <img src="~/Images/@Model.AnhBia" alt="@Model.TenSach" />
+
+  <!-- Thông tin sách -->
+  <div class="book-info">
+    <h2>@Model.TenSach</h2>
+
+    <div class="description">
+      @Html.Raw(@Model.MoTa.ToString().Replace("\n", "<br/>"))
+    </div>
+
+    <div class="book-meta">
+      Ngày cập nhật:
+      <span>@Html.FormatValue(@Model.NgayCapNhat, "{0:dd/MM/yyyy}")</span>
+    </div>
+
+    <div class="price">
+      Giá bán: @Html.FormatValue(@Model.GiaBan, "{0:#,##0}") VNĐ
+    </div>
+
+    <a href="@Url.Action("AddToCard", "ShoppingCart", new { id = Model.MaSach })"
+       class="btn btn-primary">
+      <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+      Add to Cart
+    </a>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+﻿@model IEnumerable<LacToMinh.SachOnline.Models.NHAXUATBAN>
+
+<ul class="list-group">
+  <li class="list-group-item active" style="font-weight:bold; text-align:center">
+    SÁCH THEO NHÀ XUẤT BẢN
+  </li>
+  @foreach (var nxb in Model)
+  {
+    <a href="@Url.Action("SachTheoNXB", "LacToMinh_SachOnline", new { id = nxb.MaNXB })"
+       class="list-group-item">
+      @nxb.TenNXB
+    </a>
+  }
+</ul>

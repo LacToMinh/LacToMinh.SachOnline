@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="20d54b519cf04b99ad2ec1a0753762e5" Name="Diagram1">
+        <EntityTypeShape EntityType="LacToMinh_SachOnlineModel.ADMIN" Width="1.5" PointX="5.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="LacToMinh_SachOnlineModel.CHITIETDATHANG" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LacToMinh_SachOnlineModel.CHUDE" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="LacToMinh_SachOnlineModel.DONDATHANG" Width="1.5" PointX="3" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LacToMinh_SachOnlineModel.KHACHHANG" Width="1.5" PointX="0.75" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LacToMinh_SachOnlineModel.NHAXUATBAN" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LacToMinh_SachOnlineModel.SACH" Width="1.5" PointX="3" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="LacToMinh_SachOnlineModel.TACGIA" Width="1.5" PointX="3" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LacToMinh_SachOnlineModel.VIETSACH" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="LacToMinh_SachOnlineModel.FK_CTDH_DDH" ManuallyRouted="false" />
+        <AssociationConnector Association="LacToMinh_SachOnlineModel.FK_CTDH_S" ManuallyRouted="false" />
+        <AssociationConnector Association="LacToMinh_SachOnlineModel.FK_S_CD" ManuallyRouted="false" />
+        <AssociationConnector Association="LacToMinh_SachOnlineModel.FK_DDH_KH" ManuallyRouted="false" />
+        <AssociationConnector Association="LacToMinh_SachOnlineModel.FK_Sach_NXB" ManuallyRouted="false" />
+        <AssociationConnector Association="LacToMinh_SachOnlineModel.FK_VS_S" ManuallyRouted="false" />
+        <AssociationConnector Association="LacToMinh_SachOnlineModel.FK_VS_TG" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

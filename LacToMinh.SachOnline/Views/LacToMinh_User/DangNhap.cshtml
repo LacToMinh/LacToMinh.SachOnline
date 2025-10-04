@@ -1,0 +1,81 @@
+﻿
+@{
+  ViewBag.Title = "DangNhap";
+  Layout = "~/Views/Shared/_LayoutLacToMinh.cshtml";
+}
+
+<style type="text/css">
+      td { height: 40px; }
+  </style>
+
+  <h4 style="color:red; text-align:center;">@ViewBag.ThongBao</h4>
+  <h2 style="text-align:center;">ĐĂNG NHẬP</h2>
+
+  <table align="center">
+    @using (Html.BeginForm())
+    {
+      @Html.ValidationSummary(true)
+
+      if (Request.Cookies["TenDN"] != null && Request.Cookies["MatKhau"] != null)
+      {
+        <tr>
+          <td>Tên đăng nhập: </td>
+          <td>
+            <input type="text" name="TenDN" value="@Request.Cookies["TenDN"].Value" />
+          </td>
+        </tr>
+        <tr>
+          <td>Mật khẩu: </td>
+          <td>
+            <input type="password" name="MatKhau" value="@Request.Cookies["MatKhau"].Value" />
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            @Html.CheckBox("remember", true)
+            <span style="font-style:italic">Nhớ thông tin đăng nhập</span>
+          </td>
+        </tr>
+      }
+      else
+      {
+        <tr>
+          <td>Tên đăng nhập: </td>
+          <td>
+            <input type="text" name="TenDN" />
+            @ViewData["Err1"]
+          </td>
+        </tr>
+        <tr>
+          <td>Mật khẩu: </td>
+          <td>
+            <input type="password" name="MatKhau" />
+            @ViewData["Err2"]
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            @Html.CheckBox("remember", false)
+            <span style="font-style:italic">Nhớ thông tin đăng nhập</span>
+          </td>
+        </tr>
+      }
+
+
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Đăng nhập" /></td>
+      </tr>
+
+    }
+  </table>
+
+@*<h4 class="text-danger text-center">@ViewBag.ThongBao</h4>
+<h2 class="text-center mb-4">ĐĂNG NHẬP</h2>*@
+
+
+
+
+

@@ -1,0 +1,82 @@
+﻿@model IEnumerable<LacToMinh.SachOnline.Models.NHAXUATBAN>
+
+@{
+  ViewBag.Title = "Quản lý Nhà xuất bản";
+}
+<!-- Bootstrap 3 -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+  body {
+    background-color: #f8f9fa;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  h2 {
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .btn + .btn {
+    margin-left: 5px;
+  }
+
+  .table th,
+  .table td {
+    vertical-align: middle !important;
+  }
+
+  .action-buttons {
+    min-width: 200px;
+    text-align: center;
+  }
+
+  .panel {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 6px;
+  }
+</style>
+
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix mt-4">
+      <h2 class="panel-title pull-left text-primary" style="font-size: 24px; line-height: 34px;">
+        📚 Danh sách Nhà xuất bản
+      </h2>
+      <div class="pull-right">
+        @Html.ActionLink("➕ Thêm mới", "ThemNXB", null, new { @class = "btn btn-success" })
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr class="info text-center">
+            <th>@Html.DisplayNameFor(model => model.MaNXB)</th>
+            <th>@Html.DisplayNameFor(model => model.TenNXB)</th>
+            <th>@Html.DisplayNameFor(model => model.DiaChi)</th>
+            <th>@Html.DisplayNameFor(model => model.DienThoai)</th>
+            <th class="action-buttons">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var item in Model)
+          {
+            <tr>
+              <td>@item.MaNXB</td>
+              <td>@item.TenNXB</td>
+              <td>@item.DiaChi</td>
+              <td>@item.DienThoai</td>
+              <td class="text-center">
+                @*@Html.ActionLink("", "Edit", new { id = item.MaNXB }, new { @class = "btn btn-warning btn-sm" })*@
+                <a href="@Url.Action("Edit", "NhaXuatBan")?id=@item.MaNXB" class="btn btn-warning btn-sm">✏️ Sửa</a>
+                <a href="@Url.Action("ChiTietNXB", "NhaXuatBan")?id=@item.MaNXB" class="btn btn-info btn-sm">🔍 Chi tiết</a>
+                @*@Html.ActionLink("🗑️ Xoá", "Delete", new { id = item.MaNXB }, new { @class = "btn btn-danger btn-sm" })*@
+                <a href="@Url.Action("Delete", "NhaXuatBan")?id=@item.MaNXB" class="btn btn-danger btn-sm">🗑️ Xoá</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

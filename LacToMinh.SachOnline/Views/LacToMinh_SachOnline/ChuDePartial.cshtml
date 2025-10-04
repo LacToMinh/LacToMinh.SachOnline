@@ -1,0 +1,11 @@
+﻿@model IEnumerable<LacToMinh.SachOnline.Models.CHUDE>
+
+<ul class="list-group">
+  <li class="list-group-item active" style="font-weight:bold; text-align:center">SÁCH THEO CHỦ ĐỀ</li>
+  @foreach (var cd in Model)
+  {
+    <a href="@Url.Action("SachTheoChuDe", "LacToMinh_SachOnline", new { id = cd.MaCD })" class="list-group-item">
+      @cd.TenChuDe
+    </a>
+  }
+</ul>
