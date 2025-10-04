@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using LacToMinh.SachOnline.Models;
@@ -13,6 +15,23 @@ namespace LacToMinh.SachOnline.Controllers
   {
     LacToMinh_SachOnlineEntities Minh_db = new LacToMinh_SachOnlineEntities();
     // GET: LacToMinh_User
+    //private string HashMD5(string input)
+    //{
+    //  using (MD5 md5 = MD5.Create())
+    //  {
+    //    byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+    //    byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+    //    // Chuyển sang chuỗi hex
+    //    StringBuilder sb = new StringBuilder();
+    //    for (int i = 0; i < hashBytes.Length; i++)
+    //    {
+    //      sb.Append(hashBytes[i].ToString("x2"));
+    //    }
+    //    return sb.ToString();
+    //  }
+    //}
+
     public ActionResult Index()
     {
       return View();
