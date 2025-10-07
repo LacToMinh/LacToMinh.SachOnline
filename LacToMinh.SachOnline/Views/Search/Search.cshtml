@@ -1,0 +1,55 @@
+﻿@model IEnumerable<LacToMinh.SachOnline.Models.SACH>
+@{
+  ViewBag.Title = "Search";
+  Layout = "~/Views/Shared/_LayoutLacToMinh.cshtml";
+}
+
+@using (Html.BeginForm("Search", "Search", FormMethod.Get))
+{
+  <p>
+    <input type="text" name="strSearch"
+           value="@ViewBag.Search"
+           placeholder="Nhập sản phẩm cần tìm..."
+           size="100" />
+    <input type="submit" value="Tìm kiếm" />
+  </p>
+}
+
+
+@if (Model != null && Model.Any())
+{
+  <h2>KẾT QUẢ TÌM</h2>
+
+  <table class="table">
+    <tr>
+      <th>Tên sách</th>
+      <th>Giá</th>
+      <th>Mô tả</th>
+      <th>Ảnh bìa</th>
+      <th>Ngày cập nhật</th>
+      <th>Số lượng bán</th>
+      <th>Mã CD</th>
+      <th>Mã NXB</th>
+      <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>@item.TenSach</td>
+        <td>@String.Format("{0:0,0}", item.GiaBan)</td>
+        <td>@item.MoTa</td>
+        <td><img src="~/Images/@item.AnhBia" width="80" /></td>
+        <td>@item.NgayCapNhat.ToString()</td>
+        <td>@item.SoLuongBan</td>
+        <td>@item.MaCD</td>
+        <td>@item.MaNXB</td>
+        <td>@Html.ActionLink("Chi tiết", "Details", "Sach", new { id = item.MaSach }, null)</td>
+      </tr>
+    }
+  </table>
+}
+else
+{
+  <h3>Không tìm thấy kết quả nào phù hợp.</h3>
+}
