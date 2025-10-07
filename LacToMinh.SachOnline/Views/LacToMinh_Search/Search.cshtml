@@ -66,7 +66,7 @@
   }
 </style>
 
-@using (Html.BeginForm("Search", "Search", FormMethod.Get))
+@using (Html.BeginForm("Search", "LacToMinh_Search", FormMethod.Get))
 {
   <div class="search-box">
     Chủ đề:
@@ -106,7 +106,12 @@
         <tr>
           <td>@item.TenSach</td>
           <td>@String.Format("{0:0,0}", item.GiaBan)</td>
-          <td>@item.MoTa</td>
+          <td>
+            @(item.MoTa != null && item.MoTa.Length > 100
+        ? item.MoTa.Substring(0, 100) + "..."
+        : item.MoTa)
+          </td>
+
           <td><img src="~/Images/@item.AnhBia" width="80" /></td>
           <td>@item.NgayCapNhat.ToString()</td>
           <td>@item.SoLuongBan</td>

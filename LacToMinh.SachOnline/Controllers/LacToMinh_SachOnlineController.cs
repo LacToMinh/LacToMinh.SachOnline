@@ -39,9 +39,9 @@ namespace LacToMinh.SachOnline.Controllers
       public ActionResult ChuDePartial()
       {
         var kq = Minh_db.CHUDE.ToList();
-        var cdLacToMinh = new CHUDE { MaCD = 0, TenChuDe = "Lạc Tô Minh" };
+        //var cdLacToMinh = new CHUDE { MaCD = 0, TenChuDe = "Lạc Tô Minh" };
 
-        kq.Insert(0, cdLacToMinh);
+        //kq.Insert(0, cdLacToMinh);
         return PartialView(kq);
       }
       public ActionResult SachTheoChuDe(int id)

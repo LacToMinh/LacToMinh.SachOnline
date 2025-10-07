@@ -134,7 +134,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LacToMinh_SachOnlineController.cs" />
     <Compile Include="Controllers\LacToMinh_UserController.cs" />
-    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\LacToMinh_SearchController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -173,6 +173,7 @@
     <Compile Include="Models\NHAXUATBAN.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ReportInfo.cs" />
     <Compile Include="Models\SACH.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -272,8 +273,9 @@
     <Content Include="Views\LacToMinh_User\DangKy.cshtml" />
     <Content Include="Views\LacToMinh_SachOnline\SachTheoNXB.cshtml" />
     <Content Include="Views\LacToMinh_SachOnline\ChiTietSach.cshtml" />
-    <Content Include="Views\Search\Search.cshtml" />
-    <Content Include="Views\Search\SearchTheoDanhMuc.cshtml" />
+    <Content Include="Views\LacToMinh_Search\Search.cshtml" />
+    <Content Include="Views\LacToMinh_Search\SearchTheoDanhMuc.cshtml" />
+    <Content Include="Views\LacToMinh_Search\Group.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
