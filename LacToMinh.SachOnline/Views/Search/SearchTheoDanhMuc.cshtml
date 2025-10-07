@@ -1,0 +1,66 @@
+﻿@*@model IEnumerable<LacToMinh.SachOnline.Models.SACH>
+@{
+  ViewBag.Title = "SearchTheoDanhMuc";
+  Layout = "~/Views/Shared/_LayoutLacToMinh.cshtml";
+}
+
+<style>
+  .macd {
+    width: 200px;
+  }
+</style>
+
+@using (Html.BeginForm("SearchTheoDanhMuc", "Search", FormMethod.Get))
+{
+  <p>
+    Chủ đề:
+    @Html.DropDownList("maCD", (SelectList)ViewBag.MaCD, "Tất cả chủ đề", new { @class = "macd" })
+    &nbsp;
+    Tên sách:
+    <input type="text" name="strSearch"
+           value="@ViewBag.Search"
+           placeholder="Nhập tên sách cần tìm..."
+           size="30" />
+    <input type="submit" value="Tìm kiếm" class="btn btn-primary" />
+  </p>
+}
+
+@if (Model != null && Model.Any())
+{
+  <h2>KẾT QUẢ TÌM</h2>
+  <table class="table table-bordered">
+    <tr>
+      <th>Tên sách</th>
+      <th>Mô tả</th>
+      <th>Ảnh bìa</th>
+      <th>Ngày cập nhật</th>
+      <th>Số lượng bán</th>
+      <th>Giá bán</th>
+      <th>Chủ đề</th>
+      <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>@item.TenSach</td>
+        <td>@item.MoTa</td>
+        <td><img src="~/Images/@item.AnhBia" width="80" /></td>
+        <td>@item.NgayCapNhat.ToString()</td>
+        <td>@item.SoLuongBan</td>
+        <td>@String.Format("{0:0,0}", item.GiaBan)</td>
+        <td>@item.CHUDE.TenChuDe</td>
+        <td>
+          <a href="@Url.Action("BookDetail", "SachOnline", new { MaSach = item.MaSach })">
+            Chi tiết
+          </a>
+        </td>
+      </tr>
+    }
+  </table>
+}
+else
+{
+  <h4>Không tìm thấy kết quả phù hợp.</h4>
+}*@
+
