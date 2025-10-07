@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using LacToMinh.SachOnline.Models;
 using PagedList;
+using System.Linq.Dynamic;
 
 namespace LacToMinh.SachOnline.Controllers
 {
@@ -18,12 +19,14 @@ namespace LacToMinh.SachOnline.Controllers
       return View();
     }
 
-    public ActionResult Search(string strSearch = null, int maCD = 0, int page = 1, int pageSize = 5)
+    public ActionResult Search(string strSearch = null, int maCD = 0, string sortBy = "TenSach", string sortOrder = "asc", int page = 1, int pageSize = 5)
     {
       ViewBag.Search = strSearch;
       ViewBag.MaCD = new SelectList(Minh_db.CHUDE, "MaCD", "TenChuDe");
+      ViewBag.SortBy = sortBy;
+      ViewBag.SortOrder = sortOrder;
 
-      var kq = Minh_db.SACH.Include("CHUDE").Include("NHAXUATBAN").ToList();
+      var kq = Minh_db.SACH.Include("CHUDE").Include("NHAXUATBAN").AsQueryable();
 
       if (!string.IsNullOrEmpty(strSearch))
       {
@@ -33,20 +36,21 @@ namespace LacToMinh.SachOnline.Controllers
             (s.MoTa ?? "").ToLower().Contains(keyword) ||
             (s.CHUDE.TenChuDe ?? "").ToLower().Contains(keyword) ||
             (s.NHAXUATBAN.TenNXB ?? "").ToLower().Contains(keyword)
-        ).ToList();
+        );
       }
 
       if (maCD != 0)
-        kq = kq.Where(s => s.MaCD == maCD).ToList();
+        kq = kq.Where(s => s.MaCD == maCD);
 
-      // Gán tổng số trang để hiển thị
-      int totalPages = (int)Math.Ceiling((double)kq.Count / pageSize);
+      // ✅ Gộp lại thành chuỗi sắp xếp động
+      string order = sortBy + " " + sortOrder;
+      kq = kq.OrderBy(order);
+
+      ViewBag.TotalResults = kq.Count();
       ViewBag.Page = page;
       ViewBag.PageSize = pageSize;
-      ViewBag.TotalPages = totalPages;
+      ViewBag.TotalPages = (int)Math.Ceiling((double)kq.Count() / pageSize);
 
-      ViewBag.TotalResults = kq.Count;
-      // Trả dữ liệu phân trang
       return View(kq.ToPagedList(page, pageSize));
     }
 

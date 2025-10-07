@@ -42,22 +42,22 @@
       transition: 0.3s;
     }
 
-    .search-box input[type="text"]:focus {
-      outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
-    }
+      .search-box input[type="text"]:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+      }
 
-    .btn-primary {
-      background: linear-gradient(to right, #007bff, #00aaff);
-      border: none;
-      color: white;
-      font-weight: 600;
-      padding: 8px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+  .btn-primary {
+    background: linear-gradient(to right, #007bff, #00aaff);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
 
     .btn-primary:hover {
       background: linear-gradient(to right, #0069d9, #0099dd);
@@ -76,8 +76,8 @@
   }
 
     .table thead th {
-      background: linear-gradient(to right, #007bff, #00aaff);
-      color: #fff;
+/*      background: linear-gradient(to right, #007bff, #00aaff);*/
+      color: black;
       text-align: center;
       padding: 12px 10px;
       text-transform: capitalize;
@@ -184,7 +184,6 @@
       .pagination li a:hover {
         background-color: #e9ecef;
       }
-
 </style>
 
 
@@ -212,53 +211,112 @@
     {
       <span style="color:#007bff;">"@ViewBag.Search"</span>
     }
-    — Tìm thấy <span style="color:#28a745;">@Model.Count()</span> kết quả
+    — Tìm thấy <span style="color:#28a745;">@Model.Count</span> kết quả
   </h2>
-
 
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th>Tên sách</th>
-        <th>Giá</th>
-        <th>Mô tả</th>
+        <th>
+          @Html.ActionLink("Tên sách", "Search", new
+          {
+              strSearch = ViewBag.Search,
+              maCD = Request["maCD"],
+              sortBy = "TenSach",
+              sortOrder = ViewBag.SortBy == "TenSach" && ViewBag.SortOrder == "asc" ? "desc" : "asc",
+              page = ViewBag.Page,
+              pageSize = ViewBag.PageSize
+          })
+        </th>
         <th>Ảnh bìa</th>
-        <th>Ngày cập nhật</th>
-        <th>Số lượng bán</th>
-        <th>Chủ đề</th>
-        <th>Nhà XB</th>
-        @*<th></th>*@
+        <th>
+          @Html.ActionLink("Ngày cập nhật", "Search", new
+          {
+              strSearch = ViewBag.Search,
+              maCD = Request["maCD"],
+              sortBy = "NgayCapNhat",
+              sortOrder = ViewBag.SortBy == "NgayCapNhat" && ViewBag.SortOrder == "asc" ? "desc" : "asc",
+              page = ViewBag.Page,
+              pageSize = ViewBag.PageSize
+          })
+        </th>
+        <th>
+          @Html.ActionLink("Số lượng bán", "Search", new
+          {
+              strSearch = ViewBag.Search,
+              maCD = Request["maCD"],
+              sortBy = "SoLuongBan",
+              sortOrder = ViewBag.SortBy == "SoLuongBan" && ViewBag.SortOrder == "asc" ? "desc" : "asc",
+              page = ViewBag.Page,
+              pageSize = ViewBag.PageSize
+          })
+          
+        </th>
+        <th>
+          @Html.ActionLink("Giá", "Search", new
+          {
+              strSearch = ViewBag.Search,
+              maCD = Request["maCD"],
+              sortBy = "GiaBan",
+              sortOrder = ViewBag.SortBy == "GiaBan" && ViewBag.SortOrder == "asc" ? "desc" : "asc",
+              page = ViewBag.Page,
+              pageSize = ViewBag.PageSize
+          })
+          @if (ViewBag.SortBy == "GiaBan")
+          {
+            <text>@(ViewBag.SortOrder == "asc" ? "▲" : "▼")</text>
+          }
+        </th>
+        <th>Tên chủ đề</th>
+        <th>Tên NXB</th>
       </tr>
     </thead>
+
     <tbody>
       @foreach (var item in Model)
       {
         <tr>
           <td>@item.TenSach</td>
-          <td>@String.Format("{0:0,0}", item.GiaBan)</td>
-          <td>
-            @(item.MoTa != null && item.MoTa.Length > 100
-        ? item.MoTa.Substring(0, 100) + "..."
-        : item.MoTa)
-          </td>
-
           <td><img src="~/Images/@item.AnhBia" width="80" /></td>
           <td>@item.NgayCapNhat.ToString()</td>
           <td>@item.SoLuongBan</td>
+          <td>@String.Format("{0:0,0}", item.GiaBan)</td>
           <td>@item.CHUDE.TenChuDe</td>
           <td>@item.NHAXUATBAN.TenNXB</td>
-          @*<td>
-              @Html.ActionLink("Chi tiết", "Details", "Sach", new { id = item.MaSach }, new { @class = "btn btn-link" })
-            </td>*@
         </tr>
       }
     </tbody>
   </table>
+
+  <!-- Phân trang -->
+  <!--<div style="margin-top: 20px; text-align:center;">
+    Trang @ViewBag.Page / @ViewBag.TotalPages <br />
+    Kích thước trang:
+    <select onchange="location.href='?pageSize=' + this.value + '&strSearch=@ViewBag.Search&maCD=@Request["maCD"]'">
+      <option value="5" @(ViewBag.PageSize == 5 ? "selected" : "")>5</option>
+      <option value="10" @(ViewBag.PageSize == 10 ? "selected" : "")>10</option>
+      <option value="20" @(ViewBag.PageSize == 20 ? "selected" : "")>20</option>
+    </select>
+  </div>-->
+
+  @*<div class="pagination-container" style="text-align:center; margin-top:10px;">
+    @Html.PagedListPager(Model, page => Url.Action("Search",
+        new { page, strSearch = ViewBag.Search, maCD = Request["maCD"], pageSize = ViewBag.PageSize }),
+        new PagedListRenderOptions
+        {
+            Display = PagedListDisplayMode.IfNeeded,
+            UlElementClasses = new[] { "pagination" },
+            LiElementClasses = new[] { "page-item" },
+            LinkToPreviousPageFormat = "«",
+            LinkToNextPageFormat = "»"
+        })
+  </div>*@
 }
 else
 {
   <h3>Không tìm thấy kết quả nào phù hợp.</h3>
 }
+
 
 <div style="margin-top: 20px; text-align:center;">
   Trang @ViewBag.Page / @ViewBag.TotalPages <br />
