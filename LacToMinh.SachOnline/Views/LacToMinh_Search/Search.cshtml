@@ -1,70 +1,192 @@
-﻿@model IEnumerable<LacToMinh.SachOnline.Models.SACH>
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<LacToMinh.SachOnline.Models.SACH>
 @{
   ViewBag.Title = "Search";
   Layout = "~/Views/Shared/_LayoutLacToMinh.cshtml";
 }
 
-@*@using (Html.BeginForm("Search", "Search", FormMethod.Get))
-  {
-    <p>
-      <input type="text" name="strSearch"
-             value="@ViewBag.Search"
-             placeholder="Nhập sản phẩm cần tìm..."
-             size="100" />
-      <input type="submit" value="Tìm kiếm" />
-    </p>
-  }*@
-
-
-
-@*@if (Model != null && Model.Any())
-  {
-    <h2>KẾT QUẢ TÌM</h2>
-
-    <table class="table">
-      <tr>
-        <th>Tên sách</th>
-        <th>Giá</th>
-        <th>Mô tả</th>
-        <th>Ảnh bìa</th>
-        <th>Ngày cập nhật</th>
-        <th>Số lượng bán</th>
-        <th>Mã CD</th>
-        <th>Mã NXB</th>
-        <th></th>
-      </tr>
-
-      @foreach (var item in Model)
-      {
-        <tr>
-          <td>@item.TenSach</td>
-          <td>@String.Format("{0:0,0}", item.GiaBan)</td>
-          <td>@item.MoTa</td>
-          <td><img src="~/Images/@item.AnhBia" width="80" /></td>
-          <td>@item.NgayCapNhat.ToString()</td>
-          <td>@item.SoLuongBan</td>
-          <td>@item.MaCD</td>
-          <td>@item.MaNXB</td>
-          <td>@Html.ActionLink("Chi tiết", "Details", "Sach", new { id = item.MaSach }, null)</td>
-        </tr>
-      }
-    </table>
-  }
-  else
-  {
-    <h3>Không tìm thấy kết quả nào phù hợp.</h3>
-  }*@
-
 <style>
-  .macd {
-    width: 200px;
-    margin-right: 10px;
+  /* Tiêu đề trang kết quả */
+  h2 {
+    font-weight: 700;
+    margin: 30px 0 15px;
+    font-size: 24px;
+    text-align: center;
+    color: #333;
+    letter-spacing: 0.5px;
   }
 
+    h2 span {
+      font-weight: 700;
+    }
+
+  /* Hộp tìm kiếm */
   .search-box {
-    margin-bottom: 20px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   }
+
+    .search-box input[type="text"] {
+      flex: 1;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px 10px;
+      transition: 0.3s;
+    }
+
+    .search-box input[type="text"]:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #007bff, #00aaff);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(to right, #0069d9, #0099dd);
+      transform: translateY(-1px);
+    }
+
+  /* Bảng kết quả */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    /*    border-radius: 10px;*/
+    overflow: hidden;
+  }
+
+    .table thead th {
+      background: linear-gradient(to right, #007bff, #00aaff);
+      color: #fff;
+      text-align: center;
+      padding: 12px 10px;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+    }
+
+    .table tbody td {
+      text-align: center;
+      padding: 10px;
+      border-bottom: 1px solid #e9ecef;
+      color: #333;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .table tbody tr:hover {
+      background-color: #e8f4ff;
+      transition: 0.2s;
+    }
+
+    /* Cột mô tả */
+    .table td:nth-child(3) {
+      text-align: left;
+      color: #555;
+    }
+
+    /* Cột giá và số lượng bán */
+    .table td:nth-child(2),
+    .table td:nth-child(6) {
+      color: #007bff;
+      font-weight: 600;
+    }
+
+    /* Cột chủ đề và nhà XB */
+    .table td:nth-child(7),
+    .table td:nth-child(8) {
+      color: #28a745;
+      font-weight: 500;
+    }
+
+    /* Ảnh bìa */
+    .table img {
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+      transition: 0.3s;
+    }
+
+      .table img:hover {
+        transform: scale(1.05);
+      }
+
+  /* Thông báo không tìm thấy */
+  h3 {
+    text-align: center;
+    color: #888;
+    margin-top: 30px;
+  }
+
+  /* Hiệu ứng vào trang */
+  @@keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .table {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .pagination {
+    display: inline-flex;
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+
+    .pagination li {
+      margin: 0 3px;
+    }
+
+      .pagination li a, .pagination li span {
+        display: block;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        color: #007bff;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+
+      .pagination li.active span {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+
+      .pagination li a:hover {
+        background-color: #e9ecef;
+      }
+
 </style>
+
 
 @using (Html.BeginForm("Search", "LacToMinh_Search", FormMethod.Get))
 {
@@ -84,7 +206,15 @@
 
 @if (Model != null && Model.Any())
 {
-  <h2>KẾT QUẢ TÌM</h2>
+  <h2>
+    KẾT QUẢ TÌM
+    @if (!string.IsNullOrEmpty(ViewBag.Search))
+    {
+      <span style="color:#007bff;">"@ViewBag.Search"</span>
+    }
+    — Tìm thấy <span style="color:#28a745;">@Model.Count()</span> kết quả
+  </h2>
+
 
   <table class="table table-bordered">
     <thead>
@@ -97,7 +227,7 @@
         <th>Số lượng bán</th>
         <th>Chủ đề</th>
         <th>Nhà XB</th>
-        <th></th>
+        @*<th></th>*@
       </tr>
     </thead>
     <tbody>
@@ -117,9 +247,9 @@
           <td>@item.SoLuongBan</td>
           <td>@item.CHUDE.TenChuDe</td>
           <td>@item.NHAXUATBAN.TenNXB</td>
-          <td>
-            @Html.ActionLink("Chi tiết", "Details", "Sach", new { id = item.MaSach }, new { @class = "btn btn-link" })
-          </td>
+          @*<td>
+              @Html.ActionLink("Chi tiết", "Details", "Sach", new { id = item.MaSach }, new { @class = "btn btn-link" })
+            </td>*@
         </tr>
       }
     </tbody>
@@ -128,4 +258,28 @@
 else
 {
   <h3>Không tìm thấy kết quả nào phù hợp.</h3>
-}                           
+}
+
+<div style="margin-top: 20px; text-align:center;">
+  Trang @ViewBag.Page / @ViewBag.TotalPages <br />
+
+  Kích thước trang:
+  <select onchange="location.href='?pageSize=' + this.value + '&strSearch=@ViewBag.Search&maCD=@ViewBag.MaCD'">
+    <option value="5" @(ViewBag.PageSize == 5 ? "selected" : "")>5</option>
+    <option value="10" @(ViewBag.PageSize == 10 ? "selected" : "")>10</option>
+    <option value="20" @(ViewBag.PageSize == 20 ? "selected" : "")>20</option>
+  </select>
+</div>
+
+<div class="pagination-container" style="text-align:center; margin-top:10px;">
+  @Html.PagedListPager(Model, page => Url.Action("Search",
+      new { page, strSearch = ViewBag.Search, maCD = Request["maCD"], pageSize = ViewBag.PageSize }),
+      new PagedListRenderOptions
+      {
+          Display = PagedListDisplayMode.IfNeeded,
+          UlElementClasses = new[] { "pagination" },
+          LiElementClasses = new[] { "page-item" },
+          LinkToPreviousPageFormat = "«",
+          LinkToNextPageFormat = "»"
+      })
+</div>

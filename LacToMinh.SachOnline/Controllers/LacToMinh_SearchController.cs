@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LacToMinh.SachOnline.Models;
+using PagedList;
 
 namespace LacToMinh.SachOnline.Controllers
 {
@@ -17,34 +18,38 @@ namespace LacToMinh.SachOnline.Controllers
       return View();
     }
 
-    public ActionResult Search(string strSearch = null, int maCD = 0)
+    public ActionResult Search(string strSearch = null, int maCD = 0, int page = 1, int pageSize = 5)
     {
       ViewBag.Search = strSearch;
-
-      // Danh sách chủ đề cho dropdown
       ViewBag.MaCD = new SelectList(Minh_db.CHUDE, "MaCD", "TenChuDe");
 
-      // Truy vấn cơ bản, có Include() để load cả CHUDE và NHAXUATBAN
-      var kq = Minh_db.SACH
-                      .Include("CHUDE")
-                      .Include("NHAXUATBAN")
-                      .Select(s => s);
+      var kq = Minh_db.SACH.Include("CHUDE").Include("NHAXUATBAN").ToList();
 
-      // Lọc theo tên sách
       if (!string.IsNullOrEmpty(strSearch))
       {
-        kq = kq.Where(s => s.TenSach.Contains(strSearch));
+        string keyword = strSearch.ToLower();
+        kq = kq.Where(s =>
+            (s.TenSach ?? "").ToLower().Contains(keyword) ||
+            (s.MoTa ?? "").ToLower().Contains(keyword) ||
+            (s.CHUDE.TenChuDe ?? "").ToLower().Contains(keyword) ||
+            (s.NHAXUATBAN.TenNXB ?? "").ToLower().Contains(keyword)
+        ).ToList();
       }
 
-      // Lọc theo mã chủ đề
       if (maCD != 0)
-      {
-        kq = kq.Where(s => s.MaCD == maCD);
-      }
+        kq = kq.Where(s => s.MaCD == maCD).ToList();
 
-      // Trả kết quả ra View
-      return View(kq.ToList());
+      // Gán tổng số trang để hiển thị
+      int totalPages = (int)Math.Ceiling((double)kq.Count / pageSize);
+      ViewBag.Page = page;
+      ViewBag.PageSize = pageSize;
+      ViewBag.TotalPages = totalPages;
+
+      ViewBag.TotalResults = kq.Count;
+      // Trả dữ liệu phân trang
+      return View(kq.ToPagedList(page, pageSize));
     }
+
 
     public ActionResult Group()
     {
@@ -56,33 +61,25 @@ namespace LacToMinh.SachOnline.Controllers
       return View(kq.ToList());
     }
 
+    public ActionResult ThongKe()
+    {
+      var kq = from s in Minh_db.SACH
+               join cd in Minh_db.CHUDE on s.MaCD equals cd.MaCD
+               group s by new { cd.MaCD, cd.TenChuDe } into g
+               select new ReportInfo
+               {
+                 Id = g.Key.MaCD.ToString(),
+                 Name = g.Key.TenChuDe,
+                 Count = g.Count(),
+                 Sum = g.Sum(n => n.SoLuongBan),
+                 Max = g.Max(n => n.SoLuongBan),
+                 Min = g.Min(n => n.SoLuongBan),
+                 Avg = g.Average(n => (decimal?)n.SoLuongBan)
 
-    //  public ActionResult SearchTheoDanhMuc(string strSearch = null, int maCD = 0)
-    //    {
-    //      // 1. Lưu từ khóa tìm kiếm
-    //      ViewBag.Search = strSearch;
 
-    //      // 2. Câu truy vấn cơ bản
-    //      var kq = Minh_db.SACH.Select(s => s);
+               };
 
-    //      // 3. Lọc theo tên sách
-    //      if (!string.IsNullOrEmpty(strSearch))
-    //      {
-    //        kq = kq.Where(s => s.TenSach.Contains(strSearch));
-    //      }
-
-    //      // 4. Lọc theo mã chủ đề (nếu người dùng chọn)
-    //      if (maCD != 0)
-    //      {
-    //        kq = kq.Where(s => s.CHUDE.MaCD == maCD);
-    //      }
-
-    //      // 5. Tạo danh sách chủ đề để hiển thị trong dropdown
-    //      ViewBag.MaCD = new SelectList(Minh_db.CHUDE, "MaCD", "TenChuDe");
-
-    //      // Trả về kết quả
-    //      return View(kq.ToList());
-    //    } 
-    //}
+      return View(kq);
+    }
   }
 }
