@@ -111,7 +111,7 @@
       Giá bán: @Html.FormatValue(@Model.GiaBan, "{0:#,##0}") VNĐ
     </div>
 
-    <a href="@Url.Action("AddToCard", "ShoppingCart", new { id = Model.MaSach })"
+    <a href="@Url.Action("ThemGioHang", "LacToMinh_GioHang", new { id = @Model.MaSach, url = Request.Url.ToString() })"
        class="btn btn-primary">
       <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
       Add to Cart

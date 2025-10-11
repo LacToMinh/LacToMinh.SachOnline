@@ -30,22 +30,22 @@ namespace LacToMinh.SachOnline.Controllers
 
       if (!string.IsNullOrEmpty(strSearch))
       {
-        string keyword = strSearch.ToLower();
         kq = kq.Where(s =>
-            (s.TenSach ?? "").ToLower().Contains(keyword) ||
-            (s.MoTa ?? "").ToLower().Contains(keyword) ||
-            (s.CHUDE.TenChuDe ?? "").ToLower().Contains(keyword) ||
-            (s.NHAXUATBAN.TenNXB ?? "").ToLower().Contains(keyword)
+            (s.TenSach ?? "").Contains(strSearch) ||
+            (s.MoTa ?? "").Contains(strSearch) ||
+            (s.CHUDE.TenChuDe ?? "").Contains(strSearch) ||
+            (s.NHAXUATBAN.TenNXB ?? "").Contains(strSearch)
         );
       }
 
       if (maCD != 0)
         kq = kq.Where(s => s.MaCD == maCD);
 
-      // ✅ Gộp lại thành chuỗi sắp xếp động
+      // Sắp xếp động
       string order = sortBy + " " + sortOrder;
       kq = kq.OrderBy(order);
 
+      // Phân trang
       ViewBag.TotalResults = kq.Count();
       ViewBag.Page = page;
       ViewBag.PageSize = pageSize;

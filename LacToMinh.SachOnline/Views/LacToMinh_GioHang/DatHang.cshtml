@@ -1,0 +1,212 @@
+﻿@using LacToMinh.SachOnline.Models
+@model List<GioHang>
+
+@{
+  ViewBag.Title = "ĐẶT HÀNG";
+  Layout = "~/Views/Shared/_LayoutLacToMinh.cshtml";
+  //Layout = null;
+  KHACHHANG kh = (KHACHHANG)Session["user"];
+}
+
+<style>
+  body {
+    font-family: "Segoe UI", Roboto, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+  }
+
+  h2, h3 {
+    font-weight: 700;
+    text-align: center;
+    color: #212529;
+    margin-top: 25px;
+    margin-bottom: 20px;
+  }
+
+  /* Bảng sản phẩm */
+  .table-wrapper {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    margin: 30px auto;
+    width: 90%;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+
+  thead {
+    background-color: #0d6efd;
+    color: white;
+  }
+
+  th, td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9fbff;
+  }
+
+  tr:hover {
+    background-color: #eef5ff;
+    transition: 0.2s;
+  }
+
+  td img {
+    width: 70px;
+    border-radius: 6px;
+  }
+
+  /* Tổng tiền */
+  .summary {
+    font-weight: 600;
+    color: #d63384;
+  }
+
+  /* Thông tin đặt hàng */
+  .order-info {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    width: 90%;
+    margin: 30px auto;
+    padding: 25px;
+  }
+
+    .order-info table {
+      width: 100%;
+      border: none;
+      line-height: 38px;
+    }
+
+    .order-info td {
+      border: none;
+      padding: 8px;
+    }
+
+    .order-info input[type="date"] {
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      padding: 6px 10px;
+      width: 60%;
+    }
+
+  .btn-primary {
+    background-color: #0d6efd;
+    border: none;
+    padding: 2px 18px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+    .btn-primary:hover {
+      background-color: #0b5ed7;
+    }
+</style>
+
+
+<h2 style="text-align:center;">THÔNG TIN ĐƠN HÀNG</h2>
+
+<div class="table-wrapper">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Mã Sách</th>
+        <th>Tên Sách</th>
+        <th>Ảnh Bìa</th>
+        <th>Số Lượng</th>
+        <th>Đơn Giá</th>
+        <th>Thành Tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        <tr>
+          <td>@item.iMaSach</td>
+          <td>@item.sTenSach</td>
+          <td><img src="~/Images/@item.sAnhBia" /></td>
+          <td>@item.iSoLuong</td>
+          <td>@string.Format("{0:#,##0}", item.dDonGia)</td>
+          <td class="summary">@string.Format("{0:#,##0}", item.dThanhTien)</td>
+        </tr>
+      }
+      <tr class="summary">
+        <td colspan="3" style="text-align:right;">Tổng SL: @ViewBag.TongSoLuong</td>
+        <td colspan="3">Tổng tiền: @string.Format("{0:#,##0}", ViewBag.TongTien) VNĐ</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>THÔNG TIN ĐẶT HÀNG</h3>
+@*<div class="order-info">
+    @using (Html.BeginForm("DatHang", "LacToMinh_GioHang", FormMethod.Post))
+    {
+      <table>
+        <tr><td>Họ tên khách hàng:</td><td><b>@kh.HoTen</b></td></tr>
+        <tr><td>Địa chỉ:</td><td><b>@kh.DiaChi</b></td></tr>
+        <tr><td>Điện thoại:</td><td><b>@kh.DienThoai</b></td></tr>
+        <tr><td>Ngày đặt:</td><td><b>@DateTime.Now.ToShortDateString()</b></td></tr>
+        <tr><td>Ngày giao:</td><td><input type="date" name="NgayGiao" required /></td></tr>
+        <tr><td></td><td><input type="submit" value="ĐẶT HÀNG" class="btn-primary" /></td></tr>
+      </table>
+    }
+  </div>*@
+
+<div class="order-info">
+  @using (Html.BeginForm("DatHang", "LacToMinh_GioHang", FormMethod.Post, new { onsubmit = "return validateNgayGiao();" }))
+  {
+    <table>
+      <tr><td>Họ tên khách hàng:</td><td><b>@kh.HoTen</b></td></tr>
+      <tr><td>Địa chỉ:</td><td><b>@kh.DiaChi</b></td></tr>
+      <tr><td>Điện thoại:</td><td><b>@kh.DienThoai</b></td></tr>
+      <tr><td>Ngày đặt:</td><td><b>@DateTime.Now.ToShortDateString()</b></td></tr>
+
+      <tr>
+        <td>Ngày giao:</td>
+        <td>
+          <input type="date" id="NgayGiao" name="NgayGiao" />
+          <span id="errorNgayGiao" style="color:red; font-style:italic; margin-left:5px;"></span>
+        </td>
+      </tr>
+
+      <tr><td></td><td><input type="submit" value="ĐẶT HÀNG" class="btn-primary" /></td></tr>
+    </table>
+  }
+</div>
+
+<script>
+function validateNgayGiao() {
+  const input = document.getElementById("NgayGiao");
+  const errorSpan = document.getElementById("errorNgayGiao");
+  const ngayGiao = new Date(input.value);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  errorSpan.textContent = ""; // xóa lỗi cũ
+
+  if (!input.value) {
+    errorSpan.textContent = "Vui lòng chọn ngày giao hàng!";
+    return false;
+  }
+
+  if (ngayGiao < today) {
+    errorSpan.textContent = "Ngày giao hàng phải từ hôm nay trở đi!";
+    return false;
+  }
+
+  return true;
+}
+</script>
+

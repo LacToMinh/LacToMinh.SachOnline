@@ -1,0 +1,232 @@
+﻿@model List<LacToMinh.SachOnline.Models.GioHang>
+@{
+  ViewBag.Title = "Giỏ hàng";
+  //Layout = null;
+  Layout = "~/Views/Shared/_LayoutLacToMinh.cshtml";
+}
+
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .cart-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    padding: 25px 30px;
+  }
+
+  .cart-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+  }
+
+    .cart-title i {
+      color: #0d6efd;
+    }
+
+  /* ----------- TABLE STYLE ----------- */
+  .table-wrapper {
+    border: 2px solid #0d6efd; /* viền ngoài cùng */
+    border-radius: 10px;
+    overflow: hidden; /* bo góc gọn */
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+  }
+
+  thead {
+    background-color: #0d6efd;
+    color: white;
+    text-align: center;
+    font-size: 15px;
+  }
+
+  th, td {
+    padding: 12px 10px;
+    text-align: center;
+    border: 1px solid #dee2e6; /* viền từng ô */
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f9fbff; /* xen kẽ màu nền nhẹ */
+  }
+
+  tbody tr:hover {
+    background-color: #eef4ff; /* hiệu ứng hover */
+    transition: 0.2s;
+  }
+
+  td img {
+    width: 70px;
+    border-radius: 6px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  }
+
+
+  input[type="number"] {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+  }
+
+  input[type="submit"] {
+    background-color: #198754;
+    color: #fff;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+  }
+
+    input[type="submit"]:hover {
+      background-color: #157347;
+    }
+
+  a {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+  .cart-summary {
+    text-align: right;
+    margin-top: 25px;
+    font-size: 16px;
+    color: #dc3545;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  .btn-clear {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+  }
+
+    .btn-clear:hover {
+      background-color: #b02a37;
+    }
+
+  .cart-footer {
+    text-align: right;
+    margin-top: 10px;
+  }
+
+  /* Responsive */
+  @@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+
+      thead tr {
+        display: none;
+      }
+
+    tr {
+      background: #fff;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      padding: 12px;
+    }
+
+    td {
+      text-align: left !important;
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 6px;
+      border: none;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .cart-summary, .cart-footer {
+      text-align: center;
+    }
+  }
+</style>
+
+
+<div class="cart-container">
+  <div class="cart-title">
+    <i class="fa fa-shopping-cart"></i> THÔNG TIN GIỎ HÀNG
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Mã Sách</th>
+        <th>Tên Sách</th>
+        <th>Ảnh Bìa</th>
+        <th>Số Lượng</th>
+        <th>Đơn Giá</th>
+        <th>Thành Tiền</th>
+        <th>Cập nhật</th>
+        <th>Xóa</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        <tr>
+          <td>@item.iMaSach</td>
+          <td>@item.sTenSach</td>
+          <td><img src="~/Images/@item.sAnhBia" alt="@item.sTenSach" /></td>
+
+          @using (Html.BeginForm("CapNhatGioHang", "LacToMinh_GioHang", new { iMaSach = item.iMaSach }))
+          {
+            <td>
+              <input type="number" name="txtSoLuong" value="@item.iSoLuong" min="1" />
+            </td>
+            <td>@string.Format("{0:#,##0}", item.dDonGia) đ</td>
+            <td style="color:#198754;font-weight:600;">@string.Format("{0:#,##0}", item.dThanhTien) đ</td>
+            <td><input type="submit" value="Cập nhật" /></td>
+          }
+          <td>@Html.ActionLink("Xóa", "XoaSPKhoiGioHang", new { iMaSach = item.iMaSach }, new { @class = "text-danger" })</td>
+        </tr>
+
+
+      }
+    </tbody>
+    <tr style="font-weight:bold; color:blue; text-align:center;">
+      <td colspan="9">
+        @Html.ActionLink("ĐẶT HÀNG", "DatHang", "LacToMinh_GioHang")
+      </td>
+    </tr>
+  </table>
+
+  <div class="cart-summary">
+    Tổng số lượng: @ViewBag.TongSoLuong <br />
+    Tổng tiền: <span style="color:#198754;">@string.Format("{0:#,##0}", ViewBag.TongTien)</span> đ
+  </div>
+
+  <div class="cart-footer">
+    @Html.ActionLink("🗑️ Xóa giỏ hàng", "XoaGioHang", null, new { @class = "btn-clear" })
+  </div>
+</div>

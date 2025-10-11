@@ -6,13 +6,19 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using LacToMinh.SachOnline.Models;
+using System.Net;
+using System.Net.Mail;
+//using Microsoft.AspNet.Identity;
+
 //using LacToMinh.SachOnline.Helpers;
 
 
 namespace LacToMinh.SachOnline.Controllers
 {
+
   public class LacToMinh_UserController : Controller
   {
+    //private readonly PasswordHasher passwordHasher = new PasswordHasher();
     LacToMinh_SachOnlineEntities Minh_db = new LacToMinh_SachOnlineEntities();
     // GET: LacToMinh_User
     //private string HashMD5(string input)
@@ -63,6 +69,7 @@ namespace LacToMinh.SachOnline.Controllers
         {
           ViewBag.ThongBao = "Bạn đã đăng nhập thành công.";
           Session["user"] = kh;
+          SendLoginEmail(kh.Email, kh.HoTen); // Gửi mail thông báo
 
           if (f["remember"].Contains("true"))
           {
@@ -82,6 +89,41 @@ namespace LacToMinh.SachOnline.Controllers
       }
       return View();
 
+    }
+
+    private void SendLoginEmail(string toEmail, string userName)
+    {
+      try
+      {
+        var fromAddress = new MailAddress("2324802010293@student.tdmu.edu.vn", "Sách Online");
+        var toAddress = new MailAddress(toEmail);
+        const string fromPassword = "tnwxablxfngrqkfq"; // Mật khẩu ứng dụng Gmail (16 ký tự)
+        string subject = "Đăng nhập thành công";
+        string body = $"Xin chào {userName},\n\nBạn đã đăng nhập thành công vào hệ thống Sách Online lúc {DateTime.Now:HH:mm:ss - dd/MM/yyyy}.\n\nNếu không phải bạn, vui lòng đổi mật khẩu ngay.";
+
+        var smtp = new SmtpClient
+        {
+          Host = "smtp.gmail.com",
+          Port = 587,
+          EnableSsl = true,
+          DeliveryMethod = SmtpDeliveryMethod.Network,
+          UseDefaultCredentials = false,
+          Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+        };
+
+        using (var message = new MailMessage(fromAddress, toAddress)
+        {
+          Subject = subject,
+          Body = body
+        })
+        {
+          smtp.Send(message);
+        }
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine("Lỗi gửi email: " + ex.Message);
+      }
     }
 
     public ActionResult DangXuat()
